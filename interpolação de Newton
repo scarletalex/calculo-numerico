@@ -1,0 +1,48 @@
+
+
+clear all, close all, clc
+Xd=[0 8 20 30 45];
+Yd=[0.000 52.032 160.450 275.961 370.276];
+T=[Xd' Yd'];
+x=0:1:45;
+N=length(Xd);
+NPi=length(x);
+NL=N;
+N1=N+1;
+M=N-1;
+k=1;
+disp('INTERPOLAÇÃO DE NEWTON');
+disp(' '); disp('TABELA DE PONTOS')
+for f=1:N, disp([f Xd(f) Yd(f)]); end
+disp(' '); disp('TABELA DE RESULTADOS');
+for j=3:N1
+  for i=1:M
+    p=T(i+1,j-1)-T(i,j-1);
+    ik=i+k;
+    q=T(ik,1)-T(i,1);
+    T(i,j)=p/q;
+  endfor
+  M=M-1;
+  k=k+1;
+end for
+for k=1:NPi
+  p=1;
+  y(k)=T(1,2);
+  for i=3:N1
+    p=p*(x(k)-T(i-2,1));
+    y(k)=y(k)+T(1,i)*p;
+  endfor
+  disp([k x(k) y(k)]);
+endfor
+% SAÍDA GRÁFICA
+Fig=figure(1);
+ax=axes;
+a=plot(Xd,Yd,'ko',x,y,'r');
+set(a,'MarkerSize',14,'Linewidth',4);
+L(1)=legend('pontos dados ','pontos interpolados');
+title('Velocidade do foguete')
+L(2)=xlabel('Tempo (s)'); L(3)=ylabel('Velocidade (m/s)');
+set(L,'fontsize',35);set(ax,'fontsize',30);
+set(L(1),'Box','Off','Location','NorthWest','fontsize',15);
+axis([0 50 0 400])
+grid on
